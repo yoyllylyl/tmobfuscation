@@ -10,21 +10,15 @@ RUN wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-6
     chmod +x /usr/local/bin/xray && \
     rm -rf Xray-linux-64.zip
 
-# Создание директории для конфигурации
-RUN mkdir -p /etc/xray
-
-# Копирование конфигурации и стартового скрипта
-COPY config.json /etc/xray/config.json
+# Копирование стартового скрипта
 COPY start.sh /usr/local/bin/start.sh
 
 # Делаем скрипт исполняемым
 RUN chmod +x /usr/local/bin/start.sh
 
-# Создание пользователя
-RUN adduser -D -s /bin/sh xray
-
-# Переключение на пользователя xray
-USER xray
+# Создание пользователя (но оставляем root для отладки)
+# RUN adduser -D -s /bin/sh xray
+# USER xray
 
 # Открытие порта
 EXPOSE 8080
