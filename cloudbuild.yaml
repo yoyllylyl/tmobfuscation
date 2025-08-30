@@ -23,7 +23,6 @@ steps:
     - '--min-instances=1'
     - '--max-instances=10'
     - '--timeout=3600'
-    - '--set-env-vars=PORT=8080'
 
 images:
   - 'gcr.io/$PROJECT_ID/xray-server:latest'
