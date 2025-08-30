@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Установка необходимых пакетов
-RUN apk add --no-cache ca-certificates wget unzip curl
+RUN apk add --no-cache ca-certificates wget unzip
 
 # Скачивание и установка Xray
 RUN wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip && \
@@ -13,8 +13,12 @@ RUN wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-6
 # Создание директории для конфигурации
 RUN mkdir -p /etc/xray
 
-# Копирование конфигурации
+# Копирование конфигурации и стартового скрипта
 COPY config.json /etc/xray/config.json
+COPY start.sh /usr/local/bin/start.sh
+
+# Делаем скрипт исполняемым
+RUN chmod +x /usr/local/bin/start.sh
 
 # Создание пользователя
 RUN adduser -D -s /bin/sh xray
@@ -22,12 +26,8 @@ RUN adduser -D -s /bin/sh xray
 # Переключение на пользователя xray
 USER xray
 
-# Открытие порта (Cloud Run автоматически проксирует 443 на этот порт)
+# Открытие порта
 EXPOSE 8080
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8080/ || exit 1
-
-# Запуск Xray
-CMD ["/usr/local/bin/xray", "-config", "/etc/xray/config.json"]
+# Запуск через стартовый скрипт
+CMD ["/usr/local/bin/start.sh"]
