@@ -13,6 +13,7 @@ steps:
     - 'run'
     - 'deploy'
     - 'xray-server'
+    - 'google'
     - '--image=gcr.io/$PROJECT_ID/xray-server:latest'
     - '--platform=managed'
     - '--region=europe-west1'
