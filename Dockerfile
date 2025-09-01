@@ -21,7 +21,7 @@ RUN chmod +x /usr/local/bin/start.sh
 # USER xray
 
 # Открытие порта
-EXPOSE 443
+EXPOSE 8080
 
 # Запуск через стартовый скрипт
 CMD ["/usr/local/bin/start.sh"]
