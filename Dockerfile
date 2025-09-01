@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Установка необходимых пакетов
-RUN apk add --no-cache ca-certificates wget unzip
+RUN apk add --no-cache ca-certificates wget unzip python3
 
 # Скачивание и установка Xray
 RUN wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip && \

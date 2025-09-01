@@ -22,7 +22,12 @@ cat > /tmp/config.json << EOF
             "flow": ""
           }
         ],
-        "decryption": "none"
+        "decryption": "none",
+        "fallbacks": [
+          {
+            "dest": 8081
+          }
+        ]
       },
       "streamSettings": {
         "network": "ws",
@@ -37,6 +42,14 @@ cat > /tmp/config.json << EOF
       "sniffing": {
         "enabled": true,
         "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "port": 8081,
+      "protocol": "http",
+      "settings": {
+        "timeout": 0,
+        "accounts": []
       }
     }
   ],
@@ -78,6 +91,33 @@ echo "Checking xray binary:"
 # Тест конфига
 echo "Testing config:"
 /usr/local/bin/xray test -config /tmp/config.json
+
+# Запуск простого HTTP сервера для health check в фоне
+echo "Starting health check server on port 8081..."
+cat > /tmp/health_server.py << 'HEALTH_EOF'
+import http.server
+import socketserver
+import threading
+
+class HealthHandler(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(b'OK')
+    
+    def log_message(self, format, *args):
+        pass
+
+def start_server():
+    with socketserver.TCPServer(("", 8081), HealthHandler) as httpd:
+        httpd.serve_forever()
+
+if __name__ == "__main__":
+    start_server()
+HEALTH_EOF
+
+python3 /tmp/health_server.py &
 
 # Запуск Xray
 echo "Starting Xray..."
