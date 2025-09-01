@@ -1,0 +1,1 @@
+vless://ee2d677b-ddc4-494a-8db5-7a751332ac19@YOUR_SERVER_IP:8080?type=ws&path=%2FGoogle&host=translate.google.cat#TMObfuscation
