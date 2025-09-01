@@ -16,9 +16,7 @@ COPY start.sh /usr/local/bin/start.sh
 # Делаем скрипт исполняемым
 RUN chmod +x /usr/local/bin/start.sh
 
-# Создание пользователя (но оставляем root для отладки)
-# RUN adduser -D -s /bin/sh xray
-# USER xray
+# Оставляем root для привязки к порту 443
 
 # Открытие порта
 EXPOSE 443

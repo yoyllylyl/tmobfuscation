@@ -64,4 +64,18 @@ cat > /tmp/config.json << EOF
 }
 EOF
 
-exec /usr/local/bin/xray -config /tmp/config.json
+# Запуск Xray в фоне
+/usr/local/bin/xray -config /tmp/config.json &
+XRAY_PID=$!
+
+# Ожидание запуска
+sleep 5
+
+# Проверка что Xray запустился
+if kill -0 $XRAY_PID 2>/dev/null; then
+    echo "Xray started successfully on port $PORT"
+    wait $XRAY_PID
+else
+    echo "Failed to start Xray"
+    exit 1
+fi
