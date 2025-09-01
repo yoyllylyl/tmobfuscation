@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PORT=${PORT:-8080}
+PORT=${PORT:-443}
 echo "Starting server on port: $PORT"
 
 cat > /tmp/config.json << EOF
